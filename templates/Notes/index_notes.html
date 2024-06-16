@@ -1,0 +1,35 @@
+{% include "base.html" %}
+
+{% block content %}
+
+    <div class="all-notes">
+    <div>
+        {% if not Category == None %}
+            <h1> {{ Category }}</h1>
+        {% endif %}
+        {% for i in all_notes %}
+            <div class="notes">
+                {% if not i.done %}
+                    <h1 class="article">{{ i.article }}</h1>
+                    <p class="body"> {{ i.body }}</p>
+                    <form>
+                        <input type="checkbox" class="myCheckbox" onclick="window.location.href='onclick/{{ i.id }}/'">
+                    </form>
+                {% else %}
+                    <h1 class="article-done">{{ i.article }}</h1>
+                    <p class="body-done"> {{ i.body }}</p>
+                    <form>
+                        <input type="checkbox" checked class="myCheckbox" onclick="window.location.href='onclick/{{ i.id }}/'">
+                    </form>
+                {% endif %}
+                <form method="post" action="/delete/{{ i.id }}/">
+                    {% csrf_token %}
+                    <input type="submit" value="Удалить">
+                </form>
+            </div>
+        {% endfor %}
+        <a href="/notes_form/">Создать</a>
+    </div>
+    </div>
+
+{% endblock %}
