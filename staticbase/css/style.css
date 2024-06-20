@@ -1,3 +1,17 @@
+html {
+    background-color: #FFB873; 
+    
+}
+@keyframes ani {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
 .nav {
     position: fixed;
     top: 0;
@@ -7,17 +21,8 @@
     justify-content: space-around;
     align-items: center;
     height: 50px;
-    background-color: red;
-}
-
-.nav > a {
-    text-decoration: none;
-    color: black;
-}
-
-.myCheckbox{
-    transform: scale(1.5);
-    margin-bottom: 20px;
+    background-color: #FF7F00;
+    
 }
 
 .all-notes{
@@ -35,3 +40,167 @@
     opacity: 0.6;
     text-decoration: line-through;
 }
+
+.notes, .notes-done{
+    width: 1500px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between ;
+    margin-bottom: 30px;
+    border-radius: 30px;
+    border: 5px solid #BF7730;
+    padding: 15px;
+    color: white;
+    background-color: #A65200;
+}
+
+.notes-done{
+    background-color: #BF7730;
+    border: 5px solid #A65200;
+}
+
+.checkbox-delete{
+    display: flex;
+    align-items: center;
+}
+.checkbox-noactive, .checkbox-active{
+    margin-right: 35px;
+    transform: scale(2.5);
+}
+.checkbox-noactive:hover::after {
+    content: "Нажми если выполнил ";
+    margin-top: 27px;
+    display: block;
+    position: absolute;
+    transform: scale(0.6);
+    top: -20px;
+    left: 100;
+    padding: 5px;
+    background-color: #A66F00;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 10px;
+}
+
+
+#create-notes {
+    color: gray;
+    font-size: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    margin-right: 20px;
+    transition: 1s;
+    -webkit-text-stroke: 0.2px black;
+    -webkit-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+#create-notes:hover{
+    color: #4671D5;
+    font-size: 40px;
+}
+
+.create-btn{
+    display: flex;
+    justify-content: center;
+}
+
+#delete {
+    background-color: #A66F00;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    height: 40px;
+    width: 100px;
+    border-radius: 30px;
+    transition: 0.5s ease;
+}
+
+#delete:hover {
+    font-size: 18px;
+    background-color: #BF8F30;
+}
+
+nav > a {
+    font-size: 25px;
+    margin: 0;
+    text-decoration: none;
+    color: white;
+}
+
+nav > a:after {
+    background-color: #4671D5;
+    /* Цвет линии при наведении на нее курсора мыши */
+    display: block;
+    content: "";
+    height: 3px;
+    /* Высота линии */
+    width: 0%;
+    -webkit-transition: width .3s ease-in-out;
+    -moz--transition: width .3s ease-in-out;
+    transition: width .3s ease-in-out;
+}
+
+nav > a:hover:after,
+nav > a:focus:after {
+    width: 100%;
+}
+
+#category{
+    width: 1500px;
+    display: flex;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    justify-content: center;
+    color: wheat;
+    font-size: 25px;
+}
+#text-no-notes{
+    width: 1500px;
+    display: flex;
+    justify-content: center;
+    color: white;
+    font-size: 55px;
+}
+#form-create-notes{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    animation: ani 1s forwards;
+}
+
+#form-create-notes > form{
+    font-size: 23px;
+    background-color: #A65200;
+    padding: 20px;
+    border-radius: 30px;
+    border: 5px solid #BF7730;
+}
+#form-create-notes > form > p > select{
+    font-size: 17px;
+}
+#form-create-notes > form > p > textarea {
+    height: 150px;
+    width: 250px;
+    font-size: 17px;
+}
+
+#form-create-notes>form > p > input {
+    font-size: 17px;
+}
+
+
+
+
+

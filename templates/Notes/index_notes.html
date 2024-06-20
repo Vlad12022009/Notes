@@ -1,35 +1,100 @@
 {% include "base.html" %}
 
-{% block content %}
+{% block content %} 
+
+    {% if status_scroll %}
+        <script>
+            window.history.back();
+        </script>
+    {% endif %}
 
     <div class="all-notes">
     <div>
         {% if not Category == None %}
-            <h1> {{ Category }}</h1>
+        <div id="category">
+            <h1>Категория: {{ Category }}</h1>
+        </div>
         {% endif %}
-        {% for i in all_notes %}
-            <div class="notes">
+        {% if all_notes %}
+            {% for i in all_notes %}
                 {% if not i.done %}
-                    <h1 class="article">{{ i.article }}</h1>
-                    <p class="body"> {{ i.body }}</p>
-                    <form>
-                        <input type="checkbox" class="myCheckbox" onclick="window.location.href='onclick/{{ i.id }}/'">
-                    </form>
+                    <div class="notes">
                 {% else %}
-                    <h1 class="article-done">{{ i.article }}</h1>
-                    <p class="body-done"> {{ i.body }}</p>
-                    <form>
-                        <input type="checkbox" checked class="myCheckbox" onclick="window.location.href='onclick/{{ i.id }}/'">
-                    </form>
+                    <div class="notes-done">
                 {% endif %}
-                <form method="post" action="/delete/{{ i.id }}/">
-                    {% csrf_token %}
-                    <input type="submit" value="Удалить">
-                </form>
+                    {% if not i.done %}
+                        <div class="notes-text">
+                            <h1 class="article">{{ i.article }}</h1>
+                            <p class="body"> {{ i.body }}</p>
+                        </div>
+                    {% else %}
+                        <div class="notes-text">
+                            <h1 class="article-done">{{ i.article }}</h1>
+                            <p class="body-done"> {{ i.body }}</p>
+                        </div>
+                    {% endif %}
+                    <div class="checkbox-delete">
+                        {% if not i.done %}
+                            <form>
+                                <input type="checkbox" class="checkbox-noactive" onclick="window.location.href = 'onclick/{{ i.id }}/'">
+                            </form>
+                        {% else %}
+                            <form>
+                                <input type="checkbox" checked class="checkbox-active" onclick="window.location.href = 'onclick/{{ i.id }}/'">
+                            </form>
+                        {% endif %}
+                        
+                        <form method="post" action="/delete/{{ i.id }}/">
+                            {% csrf_token %}
+                            <input type="submit" value="Удалить" id="delete">
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div id="text-no-notes">
+                <p>В данной категории нет задач</p>
             </div>
-        {% endfor %}
-        <a href="/notes_form/">Создать</a>
+        {% endif %}
+        <div class="create-btn">
+            <a href="notes_form/" id="create-notes">Создать</a>
+        </div>
     </div>
     </div>
+    {% if status_form %}
+        <div id="form-create-notes">
+            <form action="" method="post" id="form-create">
+                <button onclick="back_animation()" style="font-size: 17px;">← Назад</button>
+
+                {% csrf_token %}
+        
+                {{ form.as_p }}
+
+                <input type="submit" value="Создать" style="font-size: 17px;">
+            </form>
+        </div>
+    {% endif %}
+<script>
+
+
+    function back_animation(){
+    // Создание элемента div для затемнения экрана
+        let overlay = document.getElementById('form-create-notes');
+        let form = document.getElementById('form-create');
+        form.style.display = 'none';
+        // Анимация затемнения экрана
+        window.scrollTo(0, document.body.scrollHeight);
+        let opacity = 0.5;
+        let interval = setInterval(function () {
+            if (opacity >= 0) {
+                overlay.style.background = 'rgba(0, 0, 0, ' + opacity + ')';
+                opacity -= 0.005;
+            } else {
+                clearInterval(interval);
+                window.history.back()
+            }
+        }, 10);
+    }
+</script>
 
 {% endblock %}

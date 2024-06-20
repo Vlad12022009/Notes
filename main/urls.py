@@ -6,6 +6,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', notes_view_all),
     path('category/<str:category>/', notes_view),
+    path('category/<str:category>/notes_form/', Create_notes.as_view()),
     path('notes_form/', Create_notes.as_view()),
     path('delete/<int:pk>/', delete_note),
     path('onclick/<int:pk>/', done_or_not_notes),
