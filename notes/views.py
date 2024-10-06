@@ -2,19 +2,10 @@ from django.shortcuts import render, redirect
 from .models import Notes
 from .forms import NotesForm
 from django.views import View
+from django.http import JsonResponse
 # Create your views here.
 
-def notes_view_all(request):
-    return notes_view(request)
-
-def notes_view(request, category=None):
-    if category == None:
-        qs = Notes.objects.all()
-    else:
-        qs = Notes.objects.filter(category=category)
-    return render(request, 'Notes/index_notes.html', {'all_notes': qs, 'Category': category, 'status_form': False})
-
-class Create_notes(View):
+class Notes_view(View):
     def get(self, request, category=None):
         if category == None:
             qs = Notes.objects.all()
@@ -22,7 +13,7 @@ class Create_notes(View):
             qs = Notes.objects.filter(category=category)
 
         form = NotesForm()
-        return render(request, 'Notes/index_notes.html', {'all_notes': qs, 'Category': category, 'form': form, 'status_form': True})
+        return render(request, 'Notes/index_notes.html', {'all_notes': qs, 'Category': category, 'form': form})
     
     def post(self, request, category=None):
         if category == None:
@@ -45,8 +36,11 @@ def delete_note(request, pk):
     Notes.objects.get(id=pk).delete()
     return redirect("/")
 
-def done_or_not_notes(request, pk, category=None):
+def done_or_not_notes(request, pk):
     obj = Notes.objects.get(id=pk)
     obj.done = True if obj.done == False else False
     obj.save()
-    return redirect('/') if category == None else redirect(f"/category/{category}/")
+    response = {
+        'boolean': obj.done
+    }
+    return JsonResponse(response)

@@ -2,12 +2,6 @@
 
 {% block content %} 
 
-    {% if status_scroll %}
-        <script>
-            window.history.back();
-        </script>
-    {% endif %}
-
     <div class="all-notes">
     <div>
         {% if not Category == None %}
@@ -36,11 +30,11 @@
                     <div class="checkbox-delete">
                         {% if not i.done %}
                             <form>
-                                <input type="checkbox" class="checkbox-noactive" onclick="window.location.href = 'onclick/{{ i.id }}/'">
+                                <input type="checkbox" class="checkbox-noactive" id="checkbox{{ i.id }}" onclick="ajax_func('{{ i.id }}')">
                             </form>
                         {% else %}
                             <form>
-                                <input type="checkbox" checked class="checkbox-active" onclick="window.location.href = 'onclick/{{ i.id }}/'">
+                                <input type="checkbox" checked class="checkbox-active" id="checkbox{{ i.id }}" onclick="ajax_func('{{ i.id }}')">
                             </form>
                         {% endif %}
                         
@@ -57,14 +51,13 @@
             </div>
         {% endif %}
         <div class="create-btn">
-            <a href="notes_form/" id="create-notes">Создать</a>
+            <a id="create-notes" onclick="form()">Создать</a>
         </div>
     </div>
     </div>
-    {% if status_form %}
         <div id="form-create-notes">
             <form action="" method="post" id="form-create">
-                <button onclick="back_animation()" style="font-size: 17px;">← Назад</button>
+                <button type="button" onclick="formNone()" style="font-size: 17px;" id="back-btn">← Назад</button>
 
                 {% csrf_token %}
         
@@ -73,28 +66,74 @@
                 <input type="submit" value="Создать" style="font-size: 17px;">
             </form>
         </div>
-    {% endif %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
+    const createBtn = document.getElementById('create-notes')
+    const backBtn = document.getElementById('back-btn')
 
+    function form(e){
+        form = document.querySelector("#form-create-notes");
+        body = document.querySelector('.all-notes');
+        form.style.animation = 'ani 1s forwards'
+        form.style.display = 'flex'
+        form.style.pointerEvents = 'all'
+        body.style.animation = 'blur 1s forwards'
 
-    function back_animation(){
-    // Создание элемента div для затемнения экрана
-        let overlay = document.getElementById('form-create-notes');
-        let form = document.getElementById('form-create');
-        form.style.display = 'none';
-        // Анимация затемнения экрана
-        window.scrollTo(0, document.body.scrollHeight);
-        let opacity = 0.5;
-        let interval = setInterval(function () {
-            if (opacity >= 0) {
-                overlay.style.background = 'rgba(0, 0, 0, ' + opacity + ')';
-                opacity -= 0.005;
-            } else {
-                clearInterval(interval);
-                window.history.back()
-            }
-        }, 10);
     }
+
+    function formNone(e){
+        form = document.querySelector("#form-create-notes");
+        body = document.querySelector('.all-notes');
+        form.style.animation = 'ani-none 1s forwards'
+        body.style.animation = 'blur-none 1s forwards'
+    }
+
+    createBtn.addEventListener('click', form);
+    backBtn.addEventListener('click', formNone)
+
+    function ajax_func(id) {
+        $.ajax({
+            url: "/onclick/"+id+"/",
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'  // Не забудьте про CSRF-токен
+            },
+            success: function (response) {
+                checbox_id = "#checkbox" + id
+                if (response.boolean == true) {
+                    checkbox = document.querySelector(checbox_id)
+                    const style = document.createElement('style');
+        
+                    document.head.appendChild(style);
+
+                    div_parent = checkbox.parentNode.parentNode.parentNode
+                    div_parent.className = 'notes-done'
+
+                    h1 = div_parent.querySelector('h1')
+                    p = div_parent.querySelector('p')
+
+                    //h1.className = 'strikethrough-article';
+                    //p.className = 'strikethrough-body';
+
+                    h1.classList.add('article-done');
+                    p.classList.add('body-done');
+                }
+                else {
+                    checkbox = document.querySelector(checbox_id)
+                    div_parent = checkbox.parentNode.parentNode.parentNode
+                    div_parent.className = 'notes'
+                    h1 = div_parent.querySelector('h1')
+                    p = div_parent.querySelector('p')
+                    h1.className = 'article'
+                    p.className = 'body'
+                }
+            },
+        });
+        return false;
+    }
+
 </script>
 
 {% endblock %}
