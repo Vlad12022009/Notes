@@ -70,6 +70,9 @@ html {
 .nav>a{
     margin-left: 20px;
     margin-right: 20px;
+    @media (max-width: 578px) {
+        margin-top: 20px;
+    }
 }
 
 .nav {
@@ -127,8 +130,11 @@ html {
     word-wrap: break-word;
     @media (max-width: 1200px) {
         width: 60%;
-
-}
+    }
+    @media (max-width: 578px) {
+        width: 100%;
+        font-size: 12px;
+    }
 }
 
 .notes-done{
@@ -139,6 +145,12 @@ html {
 .checkbox-delete{
     display: flex;
     align-items: center;
+    @media (max-width: 578px) {
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
 }
 .checkbox-noactive, .checkbox-active{
     margin-right: 35px;
@@ -180,6 +192,7 @@ html {
 .create-btn{
     display: flex;
     justify-content: center;
+    margin: 30px;
 }
 
 #delete {
@@ -255,25 +268,31 @@ nav > a:focus:after {
 }
 
 #form-create-notes > form{
-    font-size: 23px;
+    font-size: 30px;
     background-color: #A65200;
     padding: 20px;
     border-radius: 30px;
     border: 5px solid #BF7730;
 }
 #form-create-notes > form > p > select{
-    font-size: 17px;
+    font-size: 20px;
 }
 #form-create-notes > form > p > textarea {
+    margin-top: 0;
     height: 150px;
-    width: 250px;
-    font-size: 17px;
+    width: 100%;
+    font-size: 20px;
 }
 
 #form-create-notes>form > p > input {
-    font-size: 17px;
+    margin-top: 0;
+    font-size: 20px;
+    width: 100%;
 }
 
+.form-label{
+    margin-bottom: 0;
+}
 
 
 

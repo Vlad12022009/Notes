@@ -61,7 +61,11 @@
 
                 {% csrf_token %}
         
-                {{ form.as_p }}
+                <p class="form-label">{{ form.article.label }}:</p>
+                <p>{{ form.article }}</p>
+                <p class="form-label">{{ form.body.label }}:</p>
+                <p>{{ form.body }}</p>
+                <p>{{ form.category.label }}: {{ form.category }}</p></p> 
 
                 <input type="submit" value="Создать" style="font-size: 17px;">
             </form>
