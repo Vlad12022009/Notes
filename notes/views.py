@@ -8,9 +8,9 @@ from django.http import JsonResponse
 class Notes_view(View):
     def get(self, request, category=None):
         if category == None:
-            qs = Notes.objects.all()
+            qs = Notes.objects.all() 
         else:
-            qs = Notes.objects.filter(category=category)
+            qs = Notes.objects.filter(category=category) 
 
         form = NotesForm()
         return render(request, 'Notes/index_notes.html', {'all_notes': qs, 'Category': category, 'form': form})
@@ -34,7 +34,10 @@ class Notes_view(View):
 
 def delete_note(request, pk):
     Notes.objects.get(id=pk).delete()
-    return redirect("/")
+    response = {
+        'delete_status': True
+    }
+    return JsonResponse(response)
 
 def done_or_not_notes(request, pk):
     obj = Notes.objects.get(id=pk)
@@ -44,3 +47,4 @@ def done_or_not_notes(request, pk):
         'boolean': obj.done
     }
     return JsonResponse(response)
+

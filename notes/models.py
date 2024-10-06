@@ -3,6 +3,7 @@ from django.db import models
 # Create your models here.
 
 class Notes(models.Model):
+
     class Category(models.TextChoices):
         WORK = 'Работа'
         FAMILY = 'Семья'

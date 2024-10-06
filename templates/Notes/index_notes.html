@@ -6,15 +6,15 @@
     <div>
         {% if not Category == None %}
         <div id="category">
-            <h1>Категория Wow: {{ Category }}</h1>
+            <h1>Категория: {{ Category }}</h1>
         </div>
         {% endif %}
         {% if all_notes %}
             {% for i in all_notes %}
                 {% if not i.done %}
-                    <div class="notes">
+                    <div class="notes" id="notes{{ i.id }}">
                 {% else %}
-                    <div class="notes-done">
+                    <div class="notes-done" id="notes{{ i.id }}">
                 {% endif %}
                     {% if not i.done %}
                         <div class="notes-text">
@@ -30,18 +30,15 @@
                     <div class="checkbox-delete">
                         {% if not i.done %}
                             <form>
-                                <input type="checkbox" class="checkbox-noactive" id="checkbox{{ i.id }}" onclick="ajax_func('{{ i.id }}')">
+                                <input type="checkbox" class="checkbox-noactive" onclick="ajax_func('{{ i.id }}')">
                             </form>
                         {% else %}
                             <form>
-                                <input type="checkbox" checked class="checkbox-active" id="checkbox{{ i.id }}" onclick="ajax_func('{{ i.id }}')">
+                                <input type="checkbox" checked class="checkbox-active" onclick="ajax_func('{{ i.id }}')">
                             </form>
                         {% endif %}
                         
-                        <form method="post" action="/delete/{{ i.id }}/">
-                            {% csrf_token %}
-                            <input type="submit" value="Удалить" id="delete">
-                        </form>
+                        <input type="submit" value="Удалить" id="delete" onclick="deleteNotes('{{ i.id }}')">
                     </div>
                 </div>
             {% endfor %}
@@ -51,13 +48,13 @@
             </div>
         {% endif %}
         <div class="create-btn">
-            <a id="create-notes" onclick="form()">Создать</a>
+            <a id="create-notes" >Создать</a>
         </div>
     </div>
     </div>
         <div id="form-create-notes">
             <form action="" method="post" id="form-create">
-                <button type="button" onclick="formNone()" style="font-size: 17px;" id="back-btn">← Назад</button>
+                <button type="button" style="font-size: 17px;" id="back-btn">← Назад</button>
 
                 {% csrf_token %}
         
@@ -105,14 +102,9 @@
                 'X-CSRFToken': '{{ csrf_token }}'  // Не забудьте про CSRF-токен
             },
             success: function (response) {
-                checbox_id = "#checkbox" + id
+                div_id = "notes" + id
                 if (response.boolean == true) {
-                    checkbox = document.querySelector(checbox_id)
-                    const style = document.createElement('style');
-        
-                    document.head.appendChild(style);
-
-                    div_parent = checkbox.parentNode.parentNode.parentNode
+                    div_parent = document.getElementById(div_id)
                     div_parent.className = 'notes-done'
 
                     h1 = div_parent.querySelector('h1')
@@ -125,11 +117,12 @@
                     p.classList.add('body-done');
                 }
                 else {
-                    checkbox = document.querySelector(checbox_id)
-                    div_parent = checkbox.parentNode.parentNode.parentNode
+                    div_parent = document.getElementById(div_id)
                     div_parent.className = 'notes'
+
                     h1 = div_parent.querySelector('h1')
                     p = div_parent.querySelector('p')
+
                     h1.className = 'article'
                     p.className = 'body'
                 }
@@ -137,6 +130,28 @@
         });
         return false;
     }
+
+    function deleteNotes(id){
+        $.ajax({
+            url: "/delete/" + id + "/",
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'  // Не забудьте про CSRF-токен
+            },
+            success: function (response) {
+                div_id = "notes" + id
+                if (response.delete_status == true) {
+                    div_parent = document.getElementById(div_id)
+                    div_parent.style.display = 'none'
+                    div_parent.style.pointerEvents = 'none'
+                }
+            },
+        });
+        return false;
+
+    }
+
+
 
 </script>
 
