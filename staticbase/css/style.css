@@ -96,6 +96,10 @@ html {
     display: flex;
     justify-content: center;
     align-items: center;
+    @media (max-width: 578px) {
+        margin-top: 200px;
+
+}
 }
 .all-notes>div{
     width: 80%;
